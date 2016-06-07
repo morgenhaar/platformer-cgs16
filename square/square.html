@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>square</title>
+    <script src="js/createjs-2015.11.26.min.js"></script>
+    <script src="js/square.js"></script>
+    <style>
+        body {
+            background-image: url("gfx/backseamless.jpg");
+            background-repeat: repeat;
+
+        }
+        @font-face {
+            font-family: HelveticaNeueThin;
+            src: url(HelveticaNeueThin.ttf);
+        }
+        #box {
+            background-color: cadetblue;
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            width: 1024px;
+
+        }
+    </style>
+</head>
+<body onload="init();">
+
+    <canvas id="box" width="1024" height="655"></canvas>
+
+</body>
+</html>

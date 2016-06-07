@@ -1,0 +1,10 @@
+{
+
+  "images": ["gfx/tiles.png"],
+  "frames": {"width":36, "height":36, "regX": 0, "regY":0},
+  "animations": {
+    "wall": [0],
+    "death": [1],
+    "win":[2]
+  }
+}

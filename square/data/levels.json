@@ -1,0 +1,10 @@
+{
+  "levels":[
+    {
+      "platforms":[
+        {"x": 0, "y": 619, "sprite":"wall", "repeat":29},
+        {"x": 431, "y": 240, "sprite":"death", "repeat":3}
+      ]
+    }
+  ]
+}

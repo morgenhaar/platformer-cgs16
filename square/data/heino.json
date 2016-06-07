@@ -1,0 +1,12 @@
+{
+
+  "framerate":12,
+  "images": ["gfx/heino.png"],
+  "frames": {"width":32, "height":41.75, "regX": 0, "regY":0},
+  "animations": {
+    "down": [0, 3],
+    "right": [4, 7],
+    "left":[8, 11],
+    "up":[12, 16]
+  }
+}
