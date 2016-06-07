@@ -12,7 +12,8 @@ var keys = {
 };
 
 var settings = {
-    maxGravity: 8
+    maxGravity: 8,
+    resetJumpPower: 20
 };
 
 function init(){
@@ -40,9 +41,10 @@ function gameReady(){
     window.onkeydown = keyDown;
     var heroTemp = new createjs.SpriteSheet(queue.getResult("heino"));
     hero = new createjs.Sprite(heroTemp, "down");
-    hero.height = 41.75;
+    hero.height = 40;
     hero.width = 32;
     hero.gravityEffect = 0;
+    hero.jumpPower = 0;
 
     stage.addChild(hero);
     createjs.Ticker.setFPS(60);
@@ -121,7 +123,7 @@ function hitTest(rect1,rect2) {
 function objectOnPlatform(moving, stationary){
     if(moving.x < stationary.x + stationary.width
         && moving.x+moving.width > stationary.x
-        && Math.abs((moving.y+moving.height) - stationary.y)<3 ){
+        && Math.abs((moving.y+moving.height) - stationary.y)<30 ){
 
         moving.y = stationary.y-moving.height;
 
@@ -132,18 +134,32 @@ function objectOnPlatform(moving, stationary){
 
 function moveHero(){
     var i, standingOnPlatform=false;
+    var canJump=false;
     for(i=0; i < platforms.length;i++){
         if(objectOnPlatform(hero, platforms[i])){
             standingOnPlatform=true;
-            console.log("ouch");
+            canJump=true;
+            //console.log("ouch");
         }
     }
+    //jumping logic
+    if(keys.up && canJump){
+        canJump=false;
+        hero.jumpPower=settings.resetJumpPower;
+    }
+    if(hero.jumpPower>0){
+        hero.y-=hero.jumpPower;
+        hero.jumpPower--;
+    }
 
-    hero.y+=hero.gravityEffect;
-    hero.gravityEffect++;
-    if(hero.gravityEffect>settings.maxGravity){
-        hero.gravityEffect=settings.maxGravity
+    //gravity
+    if(!standingOnPlatform) {
+        hero.y += hero.gravityEffect;
+        hero.gravityEffect++;
+        if (hero.gravityEffect > settings.maxGravity) {
+            hero.gravityEffect = settings.maxGravity
 
+        }
     }
 
 }

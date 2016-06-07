@@ -2,7 +2,7 @@
 
   "framerate":12,
   "images": ["gfx/heino.png"],
-  "frames": {"width":32, "height":41.75, "regX": 0, "regY":0},
+  "frames": {"width":32, "height":40, "regX": 0, "regY":0},
   "animations": {
     "down": [0, 3],
     "right": [4, 7],
