@@ -3,7 +3,8 @@
     {
       "platforms":[
         {"x": 0, "y": 619, "sprite":"wall", "repeat":29},
-        {"x": 431, "y": 240, "sprite":"death", "repeat":3}
+        {"x": 200, "y": 583, "sprite":"wall", "repeat":5},
+        {"x": 431, "y": 540, "sprite":"death", "repeat":3}
       ]
     }
   ]

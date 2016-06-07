@@ -12,8 +12,9 @@ var keys = {
 };
 
 var settings = {
-    maxGravity: 8,
-    resetJumpPower: 20
+    maxGravity: 6,
+    resetJumpPower: 20,
+    heroSpeed: 5
 };
 
 function init(){
@@ -45,6 +46,8 @@ function gameReady(){
     hero.width = 32;
     hero.gravityEffect = 0;
     hero.jumpPower = 0;
+    hero.nextX;
+    hero.nextY;
 
     stage.addChild(hero);
     createjs.Ticker.setFPS(60);
@@ -54,8 +57,8 @@ function gameReady(){
     stage.addChild(hero);*/
 }
 
-function keyDown(){
-    switch(e.keycode){
+function keyDown(e){
+    switch(e.keyCode){
         case 37:
             keys.left=true;
             break;
@@ -69,8 +72,8 @@ function keyDown(){
 
 }
 
-function keyUp(){
-    switch(e.keycode){
+function keyUp(e){
+    switch(e.keyCode){
         case 37:
             keys.left=false;
             break;
@@ -109,7 +112,7 @@ function nextLevel(){
 
 }
 
-function hitTest(rect1,rect2) {
+/*function hitTest(rect1,rect2) {
     if ( rect1.x >= rect2.x + rect2.width
         || rect1.x + rect1.width <= rect2.x
         || rect1.y >= rect2.y + rect2.height
@@ -118,12 +121,23 @@ function hitTest(rect1,rect2) {
         return false;
     }
     return true;
-}
+}*/
+
+function predictHit(rect1,rect2) {
+ if ( rect1.nextX >= rect2.x + rect2.width
+ || rect1.nextX + rect1.width <= rect2.x
+ || rect1.nextY >= rect2.y + rect2.height
+ || rect1.nextY + rect1.height <= rect2.y )
+ {
+ return false;
+ }
+ return true;
+ }
 
 function objectOnPlatform(moving, stationary){
     if(moving.x < stationary.x + stationary.width
         && moving.x+moving.width > stationary.x
-        && Math.abs((moving.y+moving.height) - stationary.y)<30 ){
+        && Math.abs((moving.y+moving.height) - stationary.y)<4 ){
 
         moving.y = stationary.y-moving.height;
 
@@ -144,16 +158,65 @@ function moveHero(){
     }
     //jumping logic
     if(keys.up && canJump){
+        console.log("jumping");
+        standingOnPlatform=false;
+        
         canJump=false;
         hero.jumpPower=settings.resetJumpPower;
     }
-    if(hero.jumpPower>0){
-        hero.y-=hero.jumpPower;
-        hero.jumpPower--;
+
+    if(keys.right){
+        var collisionDetected=false;
+        hero.nextY = hero.y;
+        hero.nextX = hero.x+settings.heroSpeed;
+
+        for(i=0; i<platforms.length; i++){
+            if(predictHit(hero, platforms[i])){
+                collisionDetected=true;
+                break;
+            }
+        }
+        if(!collisionDetected){
+            hero.x+=settings.heroSpeed;
+        }
     }
+
+    if(keys.left){
+        var collisionDetected=false;
+        hero.nextY = hero.y;
+        hero.nextX = hero.x-settings.heroSpeed;
+
+        for(i=0; i<platforms.length; i++){
+            if(predictHit(hero, platforms[i])){
+                collisionDetected=true;
+                break;
+            }
+        }
+        if(!collisionDetected){
+            hero.x-=settings.heroSpeed;
+        }
+    }
+
 
     //gravity
     if(!standingOnPlatform) {
+        if(hero.jumpPower > 0){
+            var collisionDetected=false;
+            hero.nextY = hero.y-hero.jumpPower;
+            hero.nextX = hero.x;
+
+            for(i=0; i<platforms.length; i++){
+                if(predictHit(hero, platforms[i])){
+                    collisionDetected=true;
+                    break;
+                }
+            }
+            if(collisionDetected){
+                hero.jumpPower = 0;
+            }
+            hero.y-=hero.jumpPower;
+            hero.jumpPower--;
+        }
         hero.y += hero.gravityEffect;
         hero.gravityEffect++;
         if (hero.gravityEffect > settings.maxGravity) {
